@@ -49,6 +49,21 @@ gold.dim_products  ──┘
 
 ---
 
+## 🗃️ Datasets
+
+The source data is included in the [`datasets/`](datasets) folder, so you can run the whole project yourself.
+
+| Source System | File | What it contains | Loaded into |
+|---|---|---|---|
+| **CRM** | `cust_info.csv` | Customer details (name, gender, marital status, create date) | `bronze.crm_cust_info` |
+| **CRM** | `prd_info.csv` | Product details (name, cost, product line, start/end dates) | `bronze.crm_prd_info` |
+| **CRM** | `sales_details.csv` | Sales transactions (order number, dates, quantity, price, sales) | `bronze.crm_sales_details` |
+| **ERP** | `CUST_AZ12.csv` | Extra customer data (birth date, gender) | `bronze.erp_cust_az12` |
+| **ERP** | `LOC_A101.csv` | Customer location (country) | `bronze.erp_loc_a101` |
+| **ERP** | `PX_CAT_G1V2.csv` | Product categories (category, sub-category, maintenance) | `bronze.erp_px_cat_g1v2` |
+
+---
+
 ## 🎯 Project Goals
 
 **Data Engineering**
@@ -70,6 +85,16 @@ gold.dim_products  ──┘
 
 ```
 sql-data-warehouse-project/
+│
+├── datasets/                          # Raw source data (CSV files)
+│   ├── source_crm/                    # CRM system
+│   │   ├── cust_info.csv
+│   │   ├── prd_info.csv
+│   │   └── sales_details.csv
+│   └── source_erp/                    # ERP system
+│       ├── CUST_AZ12.csv
+│       ├── LOC_A101.csv
+│       └── PX_CAT_G1V2.csv
 │
 ├── docs/                              # Documentation and diagrams
 │   ├── data_architecture.png          # Architecture image (shown above)
@@ -102,6 +127,12 @@ sql-data-warehouse-project/
 
 **Requirements:** SQL Server (Express or Developer edition) and SQL Server Management Studio (SSMS).
 
+**Get the project:** clone the repo (or download it as a ZIP from the green **Code** button).
+
+```bash
+git clone https://github.com/aiwithmubeen/sql-data-warehouse-project.git
+```
+
 Run the scripts in this order:
 
 1. **Create the database and schemas**
@@ -114,7 +145,11 @@ Run the scripts in this order:
    -- scripts/bronze/proc_load_bronze.sql
    EXEC bronze.load_bronze;
    ```
-   > Update the CSV file paths inside `proc_load_bronze.sql` to match the folder on your machine.
+   > ⚠️ **Important:** `proc_load_bronze.sql` uses `BULK INSERT` with full file paths. Before running it, change every `FROM '...'` path so it points to the `datasets` folder on **your** machine, for example:
+   > ```sql
+   > FROM 'C:\sql-data-warehouse-project\datasets\source_crm\cust_info.csv'
+   > ```
+   > The SQL Server service must also have permission to read that folder.
 3. **Silver layer** – create the tables, then clean and load the data
    ```sql
    -- scripts/silver/ddl_silver.sql
