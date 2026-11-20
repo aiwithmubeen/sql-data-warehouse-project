@@ -2,13 +2,13 @@
 
 ## Overview
 
-The **Gold Layer** is the business-level data representation, structured to support analytical and reporting use cases. It follows a **Star Schema** (Sales Data Mart) made up of **dimension tables** and a **fact table**, all exposed as SQL views built on top of the Silver Layer.
+The **Gold Layer** is the business-level data representation, structured to support analytical and reporting use cases. It follows a **Star Schema** (Sales Data Mart) made up of **dimension tables** and a **fact table**, all exposed as SQL views.
 
-| Object | Type | Grain (one row per…) | Source (Silver Layer) |
-|---|---|---|---|
-| `gold.dim_customers` | Dimension | Customer | `silver.crm_cust_info`, `silver.erp_cust_az12`, `silver.erp_loc_a101` |
-| `gold.dim_products` | Dimension | Current (active) product | `silver.crm_prd_info`, `silver.erp_px_cat_g1v2` |
-| `gold.fact_sales` | Fact | Sales order line (order + product) | `silver.crm_sales_details` |
+| Object | Type | Grain (one row per…) |
+|---|---|---|
+| `gold.dim_customers` | Dimension | Customer |
+| `gold.dim_products` | Dimension | Current (active) product |
+| `gold.fact_sales` | Fact | Sales order line (order + product) |
 
 ### Relationships
 
@@ -42,7 +42,7 @@ gold.dim_products  (product_key)  1 ──── * gold.fact_sales (product_key)
 
 ## 2. gold.dim_products
 
-- **Purpose:** Provides information about the products and their attributes. Only **current** products are included — historical versions are filtered out (`prd_end_dt IS NULL`).
+- **Purpose:** Provides information about the products and their attributes. Only **current** products are included — historical versions are filtered out.
 - **Use Case:** Product performance analysis — e.g. sales and profitability by category, sub-category, or product line; cost analysis; identifying products that need maintenance.
 - **Columns:**
 
